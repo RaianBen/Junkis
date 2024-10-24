@@ -24,4 +24,3 @@ pipeline {
             echo 'Ohh god, we are in troubles
         }
 }
-'
