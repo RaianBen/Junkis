@@ -18,10 +18,10 @@ pipeline {
 
     post {
         success {
-            echo 'It worked, you Geniuuuus !'
+            echo 'ça marche'
         }
         failure {
-            echo 'Ohh god, we are in troubles'
+            echo 'Oh ça ne fonctionne'
         }
     }
 }
