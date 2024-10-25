@@ -22,11 +22,11 @@ pipeline {
         stage('Run') {
             steps {
                 script {
-                    // Remplace "Hello World" par ce que tu veux tester
+                    // Exécute le programme avec une entrée prédéfinie
                     if (isUnix()) {
-                        sh './StringInverser "Hello World"'
+                        sh 'echo "Hello World" | ./StringInverser' // Passer l'entrée via echo
                     } else {
-                        bat 'StringInverser "Hello World"'
+                        bat 'echo Hello World | StringInverser' // Pour Windows
                     }
                 }
             }
