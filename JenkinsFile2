@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Récupérer le code du dépôt
-                git url: 'https://github.com/RaianBen/Junkis.git' , branch: 'main'
+                git url: 'https://github.com/RaianBen/Junkis.git'
             }
         }
         stage('Build') {
