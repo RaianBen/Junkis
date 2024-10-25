@@ -1,0 +1,81 @@
+pipeline {
+    agent any
+
+    stages {
+        // Stage pour récupérer le code depuis GitHub
+        stage('Get the Code !') {
+            steps {
+                git branch: 'main', url: 'https://github.com/RaianBen/Junkis.git'
+            }
+        }
+
+        // Stage de compilation
+        stage('Build') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'make' // Compilation pour Unix
+                    } else {
+                        bat 'make' // Compilation pour Windows
+                    }
+                }
+            }
+        }
+
+        // Stage de permissions pour Unix
+        stage('Permissions') {
+            when {
+                expression { isUnix() } // Exécuté uniquement sur Unix
+            }
+            steps {
+                script {
+                    sh 'chmod +x stringerinverse'  // Ajoute les droits d'exécution au binaire
+                }
+            }
+        }
+
+        // Stage pour exécuter le script os_detector.py (étape précédente)
+        stage('Setting permissions and running the script') {
+            steps {
+                sh 'chmod +x os_detector.py'
+                sh 'python3 os_detector.py'
+            }
+        }
+
+        // Stage pour exécuter le binaire compilé
+        stage('Run Binary') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh './stringerinverse' // Exécute le binaire sur Unix
+                    } else {
+                        bat 'stringerinverse.exe' // Exécute le binaire sur Windows
+                    }
+                }
+            }
+        }
+
+        // Stage de nettoyage
+        stage('Nettoyage') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'make clean' // Nettoyage pour Unix
+                    } else {
+                        bat 'make clean' // Nettoyage pour Windows
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'ça marche'
+        }
+        failure {
+            echo 'Oh ça ne fonctionne pas'
+        }
+    }
+}
+
