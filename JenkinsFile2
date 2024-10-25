@@ -2,65 +2,45 @@ pipeline {
     agent any
 
     stages {
-        stage('Get the Code !') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/RaianBen/Junkis.git'
+                // Récupérer le code du dépôt
+                git url: 'https://github.com/RaianBen/Junkis.git'
             }
         }
-
         stage('Build') {
             steps {
                 script {
                     if (isUnix()) {
-                        sh 'make'
+                        sh 'make' // Compiler le projet
                     } else {
-                        bat 'make'
+                        bat 'make' // Pour les systèmes Windows
                     }
                 }
             }
         }
-
-        stage('Permissions') {
+        stage('Run') {
             steps {
                 script {
+                    // Remplace "Hello World" par ce que tu veux tester
                     if (isUnix()) {
-                        sh 'chmod +x StringInverser' // Assure-toi que le nom est correct
-                    }
-                }
-            }
-        }
-
-        stage('Setting permissions and running the script') {
-            steps {
-                script {
-                    if (isUnix()) {
-                        sh './StringInverser' // Exécute le binaire
+                        sh './StringInverser "Hello World"'
                     } else {
-                        bat 'StringInverser.exe' // Remplace par le nom correct si besoin
+                        bat 'StringInverser "Hello World"'
                     }
                 }
             }
         }
-
-        stage('Nettoyage') {
+        stage('Clean') {
             steps {
                 script {
                     if (isUnix()) {
-                        sh 'make clean'
+                        sh 'make clean' // Nettoyer les fichiers
                     } else {
                         bat 'make clean'
                     }
                 }
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'ça marche'
-        }
-        failure {
-            echo 'Oh ça ne fonctionne pas'
         }
     }
 }
